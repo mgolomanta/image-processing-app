@@ -1,6 +1,5 @@
 import cv2 as cv
 import numpy as np
-from matplotlib import pyplot as plt 
 import streamlit as st
 from streamlit_option_menu import option_menu
 
