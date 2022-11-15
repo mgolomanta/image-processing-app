@@ -31,9 +31,9 @@ if img_file is not None:
                                     "icon": {"color": "orange", "font-size": "15px"}, 
                                     "nav-link": {"font-size": "14px", "text-align": "left", "margin":"0px", "--hover-color": "#eee"},
                                     "nav-link-selected": {"background-color": "#2C3845"}})
-        '''
-        Mean smoothing 
-        '''
+        
+        #Mean smoothing 
+        
         if Smoothing_selected == "Mean":
             st.write("**Parameters**")
             col1, col2 = st.columns(2)
@@ -57,13 +57,77 @@ if img_file is not None:
             img = cv.blur(image, kernel,borderType = bt)	
             st.write("**Image processed**")
             st.image(img, channels="RGB")
-            '''
-            btn = st.button("** Download image processed **")
-            if btn:
-                with open(os.path.join(img_file.name),"wb") as f:
-                    f.write((img).getbuffer())
-                    st.success("Image Downloaded")
-            '''
+            
+        
+        #Median smoothing 
+        
+        if Smoothing_selected == "Median":
+            st.write("**Parameters**")
+            value = st.slider("Median value", 3, 63,3,2)
+            st.write("**Median value:**", value)
+            img = cv.medianBlur(image, value)	
+            st.write("**Image processed**")
+            st.image(img, channels="RGB")
+            
+         #Gaussian smoothing 
+        
+        if Smoothing_selected == "Gaussian":
+            st.write("**Parameters**")
+            col1, col2, col3, col4 = st.columns(4)
+            with col1:
+                value = st.slider("Kernel value", 3, 63,3,2)
+                kernel =(value,value)
+                st.write("**Kernel:**", kernel)
+            with col2:
+                sigmax = st.slider("SigmaX", 0.0, 100.0,0.0,0.5)
+                st.write("**SigmaX:**", sigmax)
+            with col3:
+                sigmay = st.slider("SigmaY", 0.0, 100.0,0.0,0.5)
+                st.write("**SigmaY:**", sigmay)
+            with col4:
+                b_types = st.selectbox("Border type", ["CONSTANT", "REPLICATE","REFLECT", "ISOLATED"])
+                if b_types == "CONSTANT":
+                    bt = 0
+                elif b_types == "REPLICATE":
+                    bt = 1
+                elif b_types == "REFLECT":
+                    bt = 2
+                elif b_types == "ISOLATED":
+                    bt = 16
+                st.write("**Border type:**",b_types )
+            img = cv.GaussianBlur(image, kernel,sigmaX=sigmax, sigmaY=sigmay, borderType = bt)	
+            st.write("**Image processed**")
+            st.image(img, channels="RGB")
+            
+        #Bilateral smoothing 
+        
+        if Smoothing_selected == "Bilateral":
+            st.write("**Parameters**")
+            col1, col2, col3, col4 = st.columns(4)
+            with col1:
+                diameter  = st.slider("Diameter ", 5, 9,5,1)
+                st.write("**Diameter:**", diameter)
+            with col2:
+                sigmac = st.slider("SigmaColor", 0.0, 100.0,0.0,0.5)
+                st.write("**Sigma Color:**", sigmac)
+            with col3:
+                sigmas = st.slider("SigmaSpace", 0.0, 100.0,0.0,0.5)
+                st.write("**Sigma Space:**", sigmas)
+            with col4:
+                b_types = st.selectbox("Border type", ["CONSTANT", "REPLICATE","REFLECT", "ISOLATED"])
+                if b_types == "CONSTANT":
+                    bt = 0
+                elif b_types == "REPLICATE":
+                    bt = 1
+                elif b_types == "REFLECT":
+                    bt = 2
+                elif b_types == "ISOLATED":
+                    bt = 16
+                st.write("**Border type:**",b_types )
+            img = cv.bilateralFilter(image, d=diameter,sigmaColor=sigmac, sigmaSpace=sigmas, borderType = bt)	
+            st.write("**Image processed**")
+            st.image(img, channels="RGB", use_column_width=False)
+
 
 
                 
